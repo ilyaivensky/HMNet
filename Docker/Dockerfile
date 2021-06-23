@@ -1,16 +1,16 @@
-FROM nvidia/cuda:10.0-devel-ubuntu18.04
+FROM nvidia/cuda:11.0-devel-ubuntu18.04
 
 ##############################################################################
 # Versions
 ##############################################################################
 ENV PYTHON_VERSION=3
 ENV TENSORFLOW_VERSION=1.15.2
-ENV PYTORCH_VERSION=1.2.0
-ENV TORCHVISION_VERSION=0.4.0
+ENV PYTORCH_VERSION=1.8.0
+ENV TORCHVISION_VERSION=0.9.0
 ENV TENSORBOARDX_VERSION=1.8
-ENV CUDNN_VERSION=7.6.0.64-1+cuda10.0
-ENV NCCL_VERSION=2.4.7-1+cuda10.0
-ENV MXNET_VERSION=1.5.0
+ENV CUDNN_VERSION=8.2.0.53-1+cuda11.3
+ENV NCCL_VERSION=2.9.9-1+cuda11.3
+ENV MXNET_VERSION=1.8.0
 
 ##############################################################################
 # Installation/Basic Utilities
@@ -22,7 +22,7 @@ RUN apt-get update && \
     pdsh curl sudo net-tools \
     vim iputils-ping wget perl \
     libxml-parser-perl \
-    libcudnn7=${CUDNN_VERSION} \
+    libcudnn8=${CUDNN_VERSION} \
     libnccl2=${NCCL_VERSION} \
     libnccl-dev=${NCCL_VERSION} \
     --allow-downgrades
@@ -52,7 +52,7 @@ RUN apt-get install -y python3 python3-dev && \
 ##############################################################################
 # MXNet
 ##############################################################################
-RUN pip install mxnet-cu100==${MXNET_VERSION}
+RUN pip install mxnet-cu110==${MXNET_VERSION}
 
 ##############################################################################
 # TensorFlow
@@ -130,7 +130,7 @@ RUN pip install numpy \
                 mpi4py \
                 sentencepiece \
                 sacremoses \
-                spacy \
+                spacy==2.3.7 \
                 nltk \
                 pyrouge \
                 py-rouge \
@@ -138,8 +138,8 @@ RUN pip install numpy \
 RUN python -m spacy download en
 RUN python -m nltk.downloader punkt
 
-RUN pip install transformers==2.4.1
-RUN pip install tokenizers==0.8.1
+RUN pip install transformers==4.7.0
+RUN pip install tokenizers==0.10.3
 
 ##############################################################################
 # Set default shell to /bin/bash
